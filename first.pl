@@ -25,4 +25,4 @@ second_star(RESULT) :-
   member(X, L),
   member(Z, L),
   2020 is X+Y+Z,
-  RESULT is X*Y.
+  RESULT is X*Y*Z.
