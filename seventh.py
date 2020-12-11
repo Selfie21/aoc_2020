@@ -1,20 +1,6 @@
 import re
 
 
-class BagGraph:
-
-    def __init__(self, root):
-        self.root = root
-
-    def add_node_above(self):
-
-
-class Node:
-
-    def __init__(self, content, childNodes):
-        self.content = content
-        self.childNodes = childNodes
-
 class InputParser:
 
     @staticmethod
@@ -35,7 +21,6 @@ class InputParser:
             bags.append(InputParser.parse_bag(bag))
         return bags
 
-
     @staticmethod
     def parse_bag(input_bag):
         input_bag = input_bag.replace(" ", "")
@@ -54,13 +39,41 @@ class Bag:
         self.colour = colour
 
 
+def check_rule_for_bag(output_bags, rule):
+    for bag in output_bags:
+        if bag.colour == rule:
+            return True
+    return False
+
+
+def get_first_unchecked(queue):
+    for val in queue:
+        if queue[val]:
+            queue[val] = False
+            return val
+
+
+def add_if_unchecked(queue, rule):
+    if not(rule in queue):
+        queue[rule] = True
+
+
 f = open("inputs/seventh.txt", "r")
 rules = {}
 
-luggage =  f.read().splitlines()
-testline = luggage[0]
-ttt = InputParser.get_main_rule(testline)
+luggage = f.read().splitlines()
+for bag in luggage:
+    main_rule = InputParser.get_main_rule(bag)
+    rules[main_rule[0].colour] = main_rule[1]
+
+queue = {'shinygold': True}
+currentSearch = 'shinygold'
+while not(currentSearch is None):
+    currentSearch = get_first_unchecked(queue)
+    for rule in rules:
+        if check_rule_for_bag(rules[rule], currentSearch):
+            add_if_unchecked(queue, rule)
 
 
-
-print("")
+first = len(queue) - 1
+print(first)
